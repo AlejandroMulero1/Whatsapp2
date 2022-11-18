@@ -1,0 +1,28 @@
+table Usuarios 
+	int id PK Identity
+	String nombre                   
+	String contraseña
+	
+table Chat
+	int idChat PK Identity
+	String nombreChat                  
+	int idParticipantes  
+
+table mensajes
+	int idMensaje PK	Identity
+	String texto
+	int idChat FK (Chat)							
+	int idEmisor FK (Usuarios)
+	TimeStamp horaLLegada
+	bit leido
+
+table bloqueados
+	int idUsuario  FK (Usuarios)
+	int idBloqueado FK (Usuarios)									
+	PK (idUsuario, idContacto)
+	
+table Contactos
+	int idUsuario FK (Usuarios)
+	int idContacto FK (Usuarios)
+	PK (idUsuario, idContacto)								
+	
