@@ -8,19 +8,30 @@ public class CreacionEstructura {
         try{
             statement = con.createStatement();
             statement.execute("USE ad2223_amulero");
+
+
+
+
             //Tabla Usuarios
             CrearTabla("Usuarios", statement, new String[]{"id int PRIMARY KEY AUTO_INCREMENT",
                     "nombre varchar(45)", "contraseña varchar(45)"});
             //Tabla Chat
             CrearTabla("Chat", statement, new String[]{"idChat int PRIMARY KEY AUTO_INCREMENT",
                     "nombreChat varchar(45)", "idPrimerUsuario int", "idSegundoUsuario int",
-                    "FOREIGN KEY (idPrimerUsuario) REFERENCES id (Usuarios)",
-                    "FOREIGN KEY (idSegundoUsuario) REFERENCES id (Usuarios)"});
+                    "FOREIGN KEY (idPrimerUsuario) REFERENCES Usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE",
+                    "FOREIGN KEY (idSegundoUsuario) REFERENCES Usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE"});
+
             //Tabla Mensajes
-            CrearTabla("Mensajes", statement, new String[]{"idMensaje int PRIMARY KEY AUTO_INCREMENT",
-                    "texto varchar(255)", "idChat int", "idEmisor int", "horaLlegada timestamp", "leido bit",
-                    "FOREIGN KEY (idChat) REFERENCES idChat (Chat)", "FOREIGN KEY (idEmisor) REFERENCES id (Usuario)",
-                    "FOREIGN KEY ()"});
+            CrearTabla("Mensajes", statement, new String[]{
+                    "idMensaje int PRIMARY KEY AUTO_INCREMENT",
+                    "texto varchar(255)",
+                    "idChat int",
+                    "idEmisor int",
+                    "horaLlegada timestamp",
+                    "leido bit",
+                    "FOREIGN KEY (idChat) REFERENCES Chat (idChat) ON DELETE CASCADE ON UPDATE CASCADE",
+                    "FOREIGN KEY (idEmisor) REFERENCES Usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE"});
+
 
             CrearTabla("Mensajes", statement, new String[]{"id int PRIMARY KEY AUTO_INCREMENT",
                     "nombre varchar(45)", "contraseña varchar(45)"});
