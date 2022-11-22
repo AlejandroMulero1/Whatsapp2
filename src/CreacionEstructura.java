@@ -13,8 +13,11 @@ public class CreacionEstructura {
 
 
             //Tabla Usuarios
+
             CrearTabla("Usuarios", statement, new String[]{"id int PRIMARY KEY AUTO_INCREMENT",
                     "nombre varchar(45)", "contraseña varchar(45)"});
+
+
             //Tabla Chat
             CrearTabla("Chat", statement, new String[]{"idChat int PRIMARY KEY AUTO_INCREMENT",
                     "nombreChat varchar(45)", "idPrimerUsuario int", "idSegundoUsuario int",
@@ -33,8 +36,19 @@ public class CreacionEstructura {
                     "FOREIGN KEY (idEmisor) REFERENCES Usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE"});
 
 
-            CrearTabla("Mensajes", statement, new String[]{"id int PRIMARY KEY AUTO_INCREMENT",
-                    "nombre varchar(45)", "contraseña varchar(45)"});
+            CrearTabla("Bloqueados", statement, new String[]{
+                    "idUsuario int",
+                    "idBloqueado int",
+                    "PRIMARY KEY (idUsuario, idBloqueado)",
+                    "FOREIGN KEY (idUsuario) REFERENCES Usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE",
+                    "FOREIGN KEY (idBloqueado) REFERENCES Usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE"});
+
+            CrearTabla("Contactos", statement, new String[]{
+                    "idUsuario int",
+                    "idContacto int",
+                    "PRIMARY KEY (idUsuario, idContacto)",
+                    "FOREIGN KEY (idUsuario) REFERENCES Usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE",
+                    "FOREIGN KEY (idContacto) REFERENCES Usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE"});
 
 
         }catch (Exception ex){
