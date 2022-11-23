@@ -21,7 +21,6 @@ public class Usuarios {
     }
 
     public List<Usuarios> setUsuariosBloqueados(int id) {
-
         return this.usuariosBloqueados;
     }
 
@@ -31,6 +30,8 @@ public class Usuarios {
     }
 
     public static Usuarios getUsuario(String nombre, String contraseña){
+
+
         return new Usuarios();
     }
 
