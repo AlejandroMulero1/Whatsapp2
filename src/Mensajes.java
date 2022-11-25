@@ -6,7 +6,7 @@ public class Mensajes {
     private int idChat;
     private int idEmisor;
     private Timestamp horaLlegada;
-    private boolean leido;
+    private int leido;
 
     public Mensajes(){
 
@@ -19,5 +19,29 @@ public class Mensajes {
         this.idEmisor=idEmisor;
         this.horaLlegada=horaLlegada;
         this.leido=leido;
+    }
+
+    public int getIdMensaje() {
+        return idMensaje;
+    }
+
+    public String getTexto() {
+        return texto;
+    }
+
+    public int getIdChat() {
+        return idChat;
+    }
+
+    public int getIdEmisor() {
+        return idEmisor;
+    }
+
+    public Timestamp getHoraLlegada() {
+        return horaLlegada;
+    }
+
+    public int isLeido() {
+        return leido;
     }
 }

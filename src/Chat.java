@@ -45,10 +45,8 @@ public class Chat {
         return new Chat();
     }
 
-    public static void mostrarChat(Chat chat){
 
-    }
-
+    //TODO
     public static void mandarMensaje(Mensajes mensaje, Chat chat){
 
     }

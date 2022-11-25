@@ -1,3 +1,6 @@
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.util.List;
 
 public class Usuarios {
@@ -41,9 +44,26 @@ public class Usuarios {
 
     //TODO
     public static Usuarios getUsuario(String nombre, String contraseña){
+        Connection con;
+        Usuarios usuario;
+        String consulta1 = "SELECT * FROM Usuarios WHERE nombre = "+nombre;
 
+        if (!MetodosDB.comprobarFila(consulta1)){
+            try {
+                con = MetodosDB.conexion();
+                PreparedStatement pstmt= con.prepareStatement("INSERT INTO Usuarios VALUES(?, ?)");
+                pstmt.setString(1, nombre);
+                pstmt.setString(2, contraseña);
+            }catch (Exception ex){
+                System.out.println(ex);
+            }
+        }
 
-        return new Usuarios();
+            List<String> ListaDatos = MetodosDB.mostrarDatos(consulta1, new String[]{"id", "nombre", "contraseña"});
+
+        usuario = new Usuarios(Integer.parseInt(ListaDatos.get(0)), ListaDatos.get(1), ListaDatos.get(2));
+
+        return usuario;
     }
 
     //TODO

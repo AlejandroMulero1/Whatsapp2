@@ -1,6 +1,6 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MetodosDB {
 
@@ -40,5 +40,67 @@ public class MetodosDB {
         }catch (Exception ex) {
             System.out.println(ex);
         }
+    }
+
+    //Método que recibe una variable de tipo cadena que es la consulta SQL y un array de los campos que se quieren mostrar. Devuelve una
+    //lista de los datos obtenidos.
+    public static List<String> mostrarDatos(String consulta, String[] datos) {
+        Statement statement;
+        Connection con = null;
+        List<String> ListaCosas = new ArrayList<>();
+        try {
+
+            con = conexion();
+            statement = con.createStatement();
+
+            statement.execute("USE ad2223_amulero");
+            ResultSet rs = statement.executeQuery(consulta);
+
+            while (rs.next()) {
+                for (int i = 0; i < datos.length; i++) {
+                    if (nombraColumna(rs, datos[i])) {
+                        ListaCosas.add(rs.getString(datos[i]));
+                    }
+                }
+            }
+        }catch (Exception ex){
+            System.out.println(ex);
+        }
+        return ListaCosas;
+    }
+
+    public static boolean nombraColumna(ResultSet rs, String columnName) {
+        try {
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int columns = rsmd.getColumnCount();
+            for (int x = 1; x <= columns; x++) {
+                if (columnName.equals(rsmd.getColumnName(x))) {
+                    return true;
+                }
+            }
+        }catch (Exception ex){
+            System.out.println(ex);
+        }
+        return false;
+    }
+
+    public static boolean comprobarFila(String consulta){
+        boolean existe = false;
+        Statement statement;
+        Connection con = null;
+        try{
+            con = conexion();
+            statement = con.createStatement();
+            ResultSet rs = statement.executeQuery(consulta);
+            if(rs.next()){
+                System.out.println("Sesión iniciada");
+                existe = true;
+            }else {
+                System.out.println("Usuario no encontrado, creando un nuevo usuario.");
+            }
+        }catch (Exception ex){
+            System.out.println(ex);
+        }
+        return  existe;
     }
 }
