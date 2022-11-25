@@ -20,25 +20,39 @@ public class Usuarios {
 
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    //TODO
     public List<Usuarios> setUsuariosBloqueados(int id) {
         return this.usuariosBloqueados;
     }
 
+    //TODO
     public List<Usuarios> setContactos(int id) {
 
         return this.contactos;
     }
 
+    //TODO
     public static Usuarios getUsuario(String nombre, String contraseña){
 
 
         return new Usuarios();
     }
 
-    public static boolean estaBloqueado(Usuarios usuario2){
+    //TODO
+    public static boolean estaBloqueado(Usuarios usuario1, Usuarios Usuario2){
+        
         return true;
     }
 
+    //TODO
     public static void mostrarContactos(){
 
     }

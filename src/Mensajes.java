@@ -12,8 +12,8 @@ public class Mensajes {
 
     }
 
-    public Mensajes(int idMensaje, String texto, int idChat, int idEmisor, Timestamp horaLlegada, boolean leido){
-        this.idMensaje=idMensaje;
+    public Mensajes(String texto, int idChat, int idEmisor, Timestamp horaLlegada, int leido){
+
         this.texto=texto;
         this.idChat=idChat;
         this.idEmisor=idEmisor;
