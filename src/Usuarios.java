@@ -83,8 +83,13 @@ public class Usuarios {
         return establoqueado;
     }
 
-    //TODO
-    public static void mostrarContactos(){
-
+    public static void mostrarContactos(int id){
+        String consulta = "SELECT idContacto FROM Contactos WHERE idUsuario = "+id;
+        String consulta2;
+        List<String>ListaIDs = MetodosDB.mostrarDatos(consulta, new String[]{"idContacto"}, new String[]{"int"});
+        for (int i = 0; i < ListaIDs.size(); i++) {
+            consulta2 = "SELECT nombre FROM Usuarios WHERE idUsuario = "+ListaIDs.get(i);
+            System.out.println(MetodosDB.mostrar1Dato(consulta, "nombre", "string"));
+        }
     }
 }
