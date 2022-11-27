@@ -10,7 +10,7 @@ table Chat
 	int idParticipante2
 
 table mensajes
-	int idMensaje PK	Identity
+	int idMensaje PK Identity
 	String texto
 	int idChat FK (Chat)							
 	int idEmisor FK (Usuarios)

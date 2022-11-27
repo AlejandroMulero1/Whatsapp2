@@ -1,11 +1,13 @@
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        boolean seguir;
         boolean revisado = false;
+        int continuar;
+        Scanner sc=new Scanner(System.in);
       do {
         Usuarios usuario=Utilidades.iniciarSesion();
         if (Utilidades.mostrarMensajesNuevos(usuario) && !revisado){
-            Utilidades.mostrarMensajesNuevos(usuario);
             revisado=true;
         }
         else if (revisado){
@@ -16,19 +18,30 @@ public class Main {
                     break;
 
                 case 2:
-                    escribirEnChat();
+                    Utilidades.escribirEnChat(usuario);
                     break;
 
                 case 3:
-                    verContactos();
+                    Utilidades.verContactos(usuario);
                     break;
 
                 case 4:
-                    ajustarContactos();
+                    Utilidades.ajustarContactos(usuario);
                     break;
+
+                case 5:
+                    System.out.println("Introduzca el nombre del contacto");
+                    String nombreContacto= sc.nextLine();
+                    usuario.setContactos(nombreContacto);
+
+                case 6:
+                    Utilidades.crearChat(usuario);
+
             }
         }
-          seguir=true;
-      } while (seguir);
+          System.out.println("Desea continuar? Introduzca 0 en caso afirmativo");
+         continuar= sc.nextInt();
+
+      } while (continuar==0);
     }
 }

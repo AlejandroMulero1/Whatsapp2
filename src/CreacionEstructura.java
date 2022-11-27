@@ -6,7 +6,7 @@ public class CreacionEstructura {
         Connection con = MetodosDB.conexion();
         Statement statement;
         try{
-/*
+
 
             //Tabla Usuarios
 
@@ -46,9 +46,6 @@ public class CreacionEstructura {
                     "FOREIGN KEY (idUsuario) REFERENCES Usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE",
                     "FOREIGN KEY (idContacto) REFERENCES Usuarios (id) ON DELETE CASCADE ON UPDATE CASCADE"});
 
-
-
- */
         }catch (Exception ex){
             System.out.println(ex);
         }

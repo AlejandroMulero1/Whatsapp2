@@ -13,7 +13,6 @@ public class Mensajes {
     }
 
     public Mensajes(String texto, int idChat, int idEmisor, Timestamp horaLlegada, int leido){
-
         this.texto=texto;
         this.idChat=idChat;
         this.idEmisor=idEmisor;
@@ -21,6 +20,7 @@ public class Mensajes {
         this.leido=leido;
     }
 
+    //Geters y seters
     public int getIdMensaje() {
         return idMensaje;
     }
@@ -43,5 +43,15 @@ public class Mensajes {
 
     public int isLeido() {
         return leido;
+    }
+
+
+    /**
+     * Metodo que accede a la base de datos para actualizar los mensajes a leidos
+     * @param leido : parametro que almacena si el mensaje ha sido leido o no
+     */
+    public void setLeido(int leido) {
+        //TODO UPDATE MENSAJES SET LEIDO = 0 WHERE MENSAJE=MENSAJE (OTRO METODO)
+        this.leido = leido;
     }
 }

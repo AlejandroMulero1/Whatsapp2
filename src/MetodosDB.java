@@ -92,8 +92,7 @@ public class MetodosDB {
             con = conexion();
             statement = con.createStatement();
             ResultSet rs = statement.executeQuery(consulta);
-            if(rs.next()){
-                System.out.println("Sesión iniciada");
+            if (rs.next()) {
                 existe = true;
             }else {
                 System.out.println("Usuario no encontrado, creando un nuevo usuario.");
