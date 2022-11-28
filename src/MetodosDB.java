@@ -6,7 +6,7 @@ public class MetodosDB {
 
     public static Connection conexion() {
         Connection con = null;
-        String url = "jdbc:mysql://dns11036.phdns11.es?user=amulero&password=1234";
+        String url = "jdbc:mysql://dns11036.phdns11.es:3306/ad2223_amulero?user=ad2223_amulero&password=1234";
         try {
             con = DriverManager.getConnection(url);
             if (con != null) {

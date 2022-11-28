@@ -17,8 +17,8 @@ public class UtilidadesDB {
         int idParticipante1 = 0, idParticipante2 = 0;
 
         List<Chat> ListaChats = new ArrayList<>();
-        String consulta = "SELECT * FROM Chat WHERE idParticipante1 = "+id+" OR idParticipante2 = "+id;
-        String[] datos = new String[]{"nombreChat","idParticipante1","idParticipante2"};
+        String consulta = "SELECT * FROM Chat WHERE idPrimerUsuario = "+id+" OR idSegundoUsuario = "+id;
+        String[] datos = new String[]{"nombreChat","idPrimerUsuario","idSegundoUsuario"};
         List<String> ListaDatos = MetodosDB.mostrarDatos(consulta, datos, new String[]{"string", "int", "int"});
 
         //Con este bucle vamos a recoger todos los datos obtenidos de la ListaDatos y vamos a incorporarlos a una lista de objetos Chats
@@ -45,18 +45,25 @@ public class UtilidadesDB {
 
         try {
             con = MetodosDB.conexion();
-            PreparedStatement pstmt= con.prepareStatement("USE ad2223_amulero INSERT INTO mensajes VALUES(?, ?, ?, ?, ?)");
+            PreparedStatement pstmt= con.prepareStatement("INSERT INTO ad2223_amulero.Mensajes (texto, idChat, idEmisor, horaLlegada, leido) VALUES(?, ?, ?, ?, ?)");
             pstmt.setString(1, mensajeEnviado.getTexto());
             pstmt.setInt(2, mensajeEnviado.getIdChat());
             pstmt.setInt(3, mensajeEnviado.getIdEmisor());
             pstmt.setTimestamp(4, mensajeEnviado.getHoraLlegada());
             pstmt.setInt(5, mensajeEnviado.isLeido());
+            pstmt.execute();
 
         }catch (Exception ex){
-            System.out.println(ex);
+           ex.printStackTrace();
         }
     }
 
+    /**
+     * Metodo que accede a la base de datos para obtener el chat al que pertenezca el parametro nombre, el cual es el
+     * nombre de ese chat
+     * @param nombre : parametro que almacena el nombre del chat deseado
+     * @return un objeto de la clase chat que representa el chat deseado
+     */
     public static Chat obtenerChat(String nombre, List<Chat>ListaChats){
         Chat chat = new Chat();
         for (int i = 0; i < ListaChats.size(); i++) {

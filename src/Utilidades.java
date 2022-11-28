@@ -34,7 +34,7 @@ public class Utilidades {
     public static boolean mostrarMensajesNuevos(Usuarios usuario){
         boolean mensajesNuevos=false;
         int numMensajesNuevos=0;
-        List<Chat> chatsUsuario=obtenerChatsUsuario(usuario.getId());
+        List<Chat> chatsUsuario=UtilidadesDB.obtenerChat(usuario.getId());
         for(Chat chat:chatsUsuario){
             for (Mensajes mensaje: chat.getMensajes(chat.getIdChat())){
                 if(mensaje.isLeido()==0){
@@ -103,7 +103,7 @@ public class Utilidades {
      * @return
      */
     public static String mostrarOpcionesChats(Usuarios usuario){
-        for (Chat chat: obtenerChatsUsuario(usuario.getId())){
+        for (Chat chat: UtilidadesDB.obtenerChat(usuario.getId())){
             System.out.println(chat.getNombreChat());
         }
         System.out.println("Elija el chat deseado");

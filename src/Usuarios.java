@@ -1,3 +1,7 @@
+import javax.imageio.stream.MemoryCacheImageOutputStream;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,17 +20,31 @@ public class Usuarios {
         this.contraseña = contraseña;
     }
 
+    public Usuarios(){
+
+    }
+
+
     //Getters y Setters
     public int getId() {return id;}
+
+
 
     /**
      * Metodo que accede a la base de datos para obtener todos los contactos del usuario
      * @return una lista con los contactos del usuario
      */
     public List<String> getContactos() {
-        //TODO SELECT * FROM CONTACTOS (METODO NUEVO)
-        contactos.add("Javi"); //TEST
-        return contactos;
+        String consulta = "SELECT idContacto FROM Contactos WHERE idUsuario = "+this.id;
+        String nombre, consulta2;
+        List<String> listaIds = MetodosDB.mostrarDatos(consulta, new String[]{"idContacto"}, new String[]{"int"});
+        List<String> listaNombreContactos = new ArrayList<>();
+        for (int i = 0; i < listaIds.size(); i++) {
+            consulta2 = "SELECT nombre FROM Usuarios WHERE id = "+listaIds.get(i);
+            nombre = MetodosDB.mostrar1Dato(consulta2, "nombre", "string");
+            listaNombreContactos.add(nombre);
+        }
+        return listaNombreContactos;
     }
 
     /**
@@ -34,14 +52,22 @@ public class Usuarios {
      * @return una lista con los contactos bloqueados del usuario
      */
     public List<String> getUsuariosBloqueados() {
-        //TODO SELECT * FROM BLOQUEADOS (METODO NUEVO)
-        return usuariosBloqueados;
+        String consulta = "SELECT idBloqueado FROM Bloqueados WHERE idUsuario = "+this.id;
+        String nombre, consulta2;
+        List<String> listaIds = MetodosDB.mostrarDatos(consulta, new String[]{"idBloqueado"}, new String[]{"int"});
+        List<String> listaNombreBloqueados = new ArrayList<>();
+        for (int i = 0; i < listaIds.size(); i++) {
+            consulta2 = "SELECT nombre FROM Usuarios WHERE id = "+listaIds.get(i);
+            nombre = MetodosDB.mostrar1Dato(consulta2, "nombre", "string");
+            listaNombreBloqueados.add(nombre);
+        }
+        return listaNombreBloqueados;
     }
 
 
     /**
      * Metodo que accede a la base de datos para insertar un nuevo contacto
-     * @param contaco
+     * @param contacto
      */
     public void setContactos(String contacto) {
         //TODO TEST
@@ -122,7 +148,7 @@ public class Usuarios {
 
 
     public static boolean estaBloqueado(Usuarios usuario1, Usuarios usuario2){
-        String consulta = "SELECT * FROM bloqueados WHERE idUsuario = "+usuario1.getId() +" AND idBloqueado = "+usuario2.getId();
+        String consulta = "SELECT * FROM Bloqueados WHERE idUsuario = "+usuario1.getId() +" AND idBloqueado = "+usuario2.getId();
         Boolean establoqueado = MetodosDB.comprobarFila(consulta);
         return establoqueado;
     }

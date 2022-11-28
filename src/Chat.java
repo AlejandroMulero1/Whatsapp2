@@ -1,5 +1,6 @@
 import java.lang.reflect.Constructor;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -9,15 +10,15 @@ public class Chat {
 
     private int idChat;
 
-    private static int  contadorChats=1;
+    private static int contadorChats = 1;
     private String nombreChat;
     private int idParticipante1;
     private int idParticipante2;
 
     private ArrayList<Mensajes> mensajes = new ArrayList<>();
 
-    public Chat(int idChat, String nombre, int idParticipante1, int idParticipante2){
-        this.idChat=idChat;
+    public Chat(int idChat, String nombre, int idParticipante1, int idParticipante2) {
+        this.idChat = idChat;
         this.nombreChat = nombre;
         this.idParticipante1 = idParticipante1;
         this.idParticipante2 = idParticipante2;
@@ -40,6 +41,7 @@ public class Chat {
     /**
      * Metodo que accederá a la base de datos y obtiene todos los mensajes pertenecientes al chat al que pertenece la id que
      * le pasamos como parametro al método
+     *
      * @param idChat : parametro que contiene la id del chat del cual deseamos obtener sus mensajes
      * @return una lista de mensajes la cual posee todos los mensajes de esa conversacion
      */
@@ -103,11 +105,11 @@ public class Chat {
 
 
     //Hecho
-    public static Chat crearChat(String nombreChat, String nombreParticipante1, String nombreParticipante2){
+    public static void crearChat(String nombreChat, String nombreParticipante1, String nombreParticipante2) {
         Chat chat;
         Connection con;
-        String consulta1 = "SELECT id FROM Usuarios WHERE nombre = "+nombreParticipante1;
-        String consulta2 = "SELECT id FROM Usuarios WHERE nombre = "+nombreParticipante2;
+        String consulta1 = "SELECT id FROM Usuarios WHERE nombre = '" + nombreParticipante1+"'";
+        String consulta2 = "SELECT id FROM Usuarios WHERE nombre = '" + nombreParticipante2+"'";
         int id1, id2;
         //Busca en la BBDD los id correspondientes a los nombres recibidos
         id1 = Integer.parseInt(MetodosDB.mostrar1Dato(consulta1, "id", "int"));
@@ -116,16 +118,14 @@ public class Chat {
         //Inserta el chat en la BBDD
         try {
             con = MetodosDB.conexion();
-            PreparedStatement pstmt= con.prepareStatement("USE ad2223_amulero INSERT INTO Chat VALUES(?, ?, ?)");
+            PreparedStatement pstmt = con.prepareStatement("INSERT INTO ad2223_amulero.Chat(nombreChat, idPrimerUsuario, idSegundoUsuario) VALUES(?, ?, ?)");
             pstmt.setString(1, nombreChat);
             pstmt.setInt(2, id1);
             pstmt.setInt(3, id2);
             pstmt.execute();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println(ex);
         }
-        Chat chatInsertado=new Chat(contadorChats, nombreChat, id1, id2);
-        contadorChats++;
-        return chatInsertado;
+        Chat chatInsertado = new Chat(contadorChats, nombreChat, id1, id2);
     }
 }
