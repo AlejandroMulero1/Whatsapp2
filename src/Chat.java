@@ -46,8 +46,6 @@ public class Chat {
      * @return una lista de mensajes la cual posee todos los mensajes de esa conversacion
      */
     public ArrayList<Mensajes> getMensajes(int idChat) {
-        //TODO SELECT * FROM MENSAJES WHERE IdChat= :idChat
-        //TODO TEST
         ArrayList<Mensajes> ListaMensajesCompleta = new ArrayList<>();
         //Consulta
         String consulta = "SELECT * FROM Mensajes WHERE idChat = " + idChat + " ORDER BY horaLLegada";
@@ -104,7 +102,12 @@ public class Chat {
 //Metodos
 
 
-    //Hecho
+    /**
+     *Metodo que crea un chat a través del nombre y los dos usuarios participantes
+     * @param nombreChat
+     * @param nombreParticipante1
+     * @param nombreParticipante2
+     */
     public static void crearChat(String nombreChat, String nombreParticipante1, String nombreParticipante2) {
         Chat chat;
         Connection con;

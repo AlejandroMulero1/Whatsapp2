@@ -70,7 +70,6 @@ public class Usuarios {
      * @param contacto
      */
     public void setContactos(String contacto) {
-        //TODO TEST
         try {
             Connection connection=MetodosDB.conexion();
             PreparedStatement pstmt=connection.prepareStatement("INSERT INTO ad2223_amulero.Contactos VALUES(?,?)");
@@ -133,6 +132,7 @@ public class Usuarios {
                 pstmt.setString(2, contraseña);
                 pstmt.executeUpdate();
                 System.out.println("Usuario creado, iniciando sesión");
+                con.close();
             }catch (Exception ex){
                 System.out.println(ex);
             }
@@ -144,22 +144,5 @@ public class Usuarios {
         List<String> DatosUsuario= MetodosDB.mostrarDatos(consulta, new String[]{"id", "nombre", "contraseña"}, new String[]{"int", "string", "string"});
         Usuarios usuario = new Usuarios(Integer.parseInt(DatosUsuario.get(0)), DatosUsuario.get(1), DatosUsuario.get(2));
         return usuario;
-    }
-
-
-    public static boolean estaBloqueado(Usuarios usuario1, Usuarios usuario2){
-        String consulta = "SELECT * FROM Bloqueados WHERE idUsuario = "+usuario1.getId() +" AND idBloqueado = "+usuario2.getId();
-        Boolean establoqueado = MetodosDB.comprobarFila(consulta);
-        return establoqueado;
-    }
-
-    public static void mostrarContactos(int id){
-        String consulta = "SELECT idContacto FROM Contactos WHERE idUsuario = "+id;
-        String consulta2;
-        List<String>ListaIDs = MetodosDB.mostrarDatos(consulta, new String[]{"idContacto"}, new String[]{"int"});
-        for (int i = 0; i < ListaIDs.size(); i++) {
-            consulta2 = "SELECT nombre FROM Usuarios WHERE idUsuario = "+ListaIDs.get(i);
-            System.out.println(MetodosDB.mostrar1Dato(consulta, "nombre", "string"));
-        }
     }
 }

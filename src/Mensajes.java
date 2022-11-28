@@ -77,7 +77,6 @@ public class Mensajes {
      * @param leido : parametro que almacena si el mensaje ha sido leido o no
      */
     public void setLeido(int leido) {
-        //TODO TEST
         try {
             Connection connection=MetodosDB.conexion();
             PreparedStatement pstmt= connection.prepareStatement("UPDATE ad2223_amulero.Mensajes SET leido=1 WHERE idMensaje=?");

@@ -4,11 +4,11 @@ import java.util.TimerTask;
 
 public class Main {
     public static void main(String[] args) {
-        boolean mensajesNuevos;
+
         Scanner sc = new Scanner(System.in);
-        //Timer timer = new Timer();
-        //timer.scheduleAtFixedRate(new TimerTask() {
-        // @Override public void run() {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+         @Override public void run() {
         Usuarios usuario = Utilidades.iniciarSesion();
         Utilidades.mostrarMensajesNuevos(usuario);
               int opcion = Utilidades.mostrarOpciones();
@@ -41,8 +41,8 @@ public class Main {
               }
             }
 
-        //}, 1000, 5000);
+        }, 1000, 15000);
     }
-    //}
+    }
 
 

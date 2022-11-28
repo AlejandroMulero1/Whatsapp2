@@ -1,0 +1,24 @@
+(Importante leer para saber como funciona el programa)
+
+El programa contiene dos clases ejecutables, CreacionEstructura y Main, CreacionEstructura no es necesario volver a ejecutarla, pues
+se encarga de crear la estructura de las tablas de la base de datos, y como la base de datos es global y ya tiene esas tablas creadas,
+volver a ejecutar CreacionEstructura solo asegura un tremendo petardazo.
+
+Por otro lado la clase Main es la encargada de gestionar el programa, llamando a todos los metodos y funcionalidades que
+requiere el programa para desempeñarse
+
+Al ejecutar el Main lo primero que pedira es logear al usuario a través de un nombre y una contraseña, si el nombre y la
+contraseña ya existen, se devolvera dicho usuario, pero si dichos campos no son encontrados en la base de datos, se insertara
+un usuario con dichos campos
+
+Para testear el programa es necesario 2 usuarios, que uno añada en contactos al otro y inicie un chat, sobre este tema hemos
+tenido en cuenta una funcionalidad, un usuario puede agregar a otro usuario a contactos y a un chat sin que este ultimo
+lo tenga tambien agregado a contactos
+
+Una vez creado el chat (A traves de utilizar los usuarios ya definidos en la BD*, o crear nuevos*2) todas las funcionalidades del
+programa podran ser utilizadas
+
+*=Usuarios: Ale (contraseña: ale) Javi (contraseña= javi)
+*2=Si creas los usuarios debes tener en cuenta que uno de los dos tiene que añadir en contactos al otro para posteriormente crear el chat
+
+

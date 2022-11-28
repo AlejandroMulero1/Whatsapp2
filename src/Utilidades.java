@@ -80,18 +80,18 @@ public class Utilidades {
     public static void verChat(Usuarios usuario){
         String chat= mostrarOpcionesChats(usuario);
         Chat chatSelected=UtilidadesDB.obtenerChat(chat, UtilidadesDB.obtenerChat(usuario.getId()));
-        int participante1= chatSelected.getIdParticipante1();
-        String usuario1=obtenerNombreUsuarioPorId(participante1);
-
         int participante2 = chatSelected.getIdParticipante2();
         String usuario2=obtenerNombreUsuarioPorId(participante2);
-        if (!usuario.getUsuariosBloqueados().contains(usuario1) || !usuario.getUsuariosBloqueados().contains(usuario2)){
+        if (!usuario.getUsuariosBloqueados().contains(usuario2)){
             List<Mensajes> mensajesChat=chatSelected.getMensajes(chatSelected.getIdChat());
             for (Mensajes mensaje:mensajesChat){
                 System.out.println(obtenerNombreUsuarioPorId(mensaje.getIdEmisor())+ ": " + mensaje.getTexto() + "\n Fecha:" + mensaje.getHoraLlegada() + " (" + mensaje.isLeido() + ")");
                 System.out.println();
                 mensaje.setLeido(1);
             }
+
+        }else{
+            System.out.println("Usted ha bloqueado a este contacto, por lo cual la conversacion no esta disponible");
         }
 
     }
@@ -177,7 +177,7 @@ public class Utilidades {
         } else if (opcion==2){
             List<String> bloqueados=verBloqueados(usuario);
             System.out.println("Escriba al contacto que desea desbloquear");
-            int desbloqueado=s.nextInt();
+            String desbloqueado=s.next();
             for (String bloqueado:bloqueados){
                 if(bloqueado.equals(desbloqueado)){
                     usuario.setUsuariosBloqueados(bloqueado, false);
@@ -219,7 +219,6 @@ public class Utilidades {
 
         System.out.println("Introduzca el nombre del chat");
         String nombre=s.next();
-        //TODO TEST
         Chat.crearChat(nombre, usuario.getNombre(), contacto);
     }
 }

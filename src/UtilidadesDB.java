@@ -39,7 +39,10 @@ public class UtilidadesDB {
     }
 
 
-
+    /**
+     * Metodo que inserta en la BD un mensaje pasado por parametro a través de una conexion con la BD y un PreparedStatement
+     * @param mensajeEnviado
+     */
     public static void insertarMensaje(Mensajes mensajeEnviado){
         Connection con = null;
 
@@ -73,15 +76,5 @@ public class UtilidadesDB {
         }
         return chat;
     }
-
-    public static void mostrarTodosLosChats(List<Chat>ListaChats){
-        for (int i = 0; i < ListaChats.size(); i++) {
-            System.out.println(ListaChats.get(i).getNombreChat());
-        }
-    }
-
-
-
-
 
 }

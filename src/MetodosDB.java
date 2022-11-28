@@ -4,6 +4,10 @@ import java.util.List;
 
 public class MetodosDB {
 
+    /**
+     * Metodo que accede a la BD y devuelve la conexion a esta ultima
+     * @return conexion a la BD
+     */
     public static Connection conexion() {
         Connection con = null;
         String url = "jdbc:mysql://dns11036.phdns11.es:3306/ad2223_amulero?user=ad2223_amulero&password=1234";
@@ -17,6 +21,11 @@ public class MetodosDB {
         return con;
     }
 
+    /**
+     * Método que crea una tabla a traves de una cadena con el nombre d ela tabla y un array de los campos que tendra la tabla
+     * @param nombre: nombre de la tabla
+     * @param campos : campos de la tabla
+     */
     public static void CrearTabla(String nombre, String[] campos) {
         Statement statement;
         Connection con = null;
