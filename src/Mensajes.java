@@ -1,3 +1,6 @@
+import java.net.ConnectException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 
 public class Mensajes {
@@ -45,13 +48,45 @@ public class Mensajes {
         return leido;
     }
 
+    public void setIdMensaje(int idMensaje) {
+        this.idMensaje = idMensaje;
+    }
+
+    public void setTexto(String texto) {
+        this.texto = texto;
+    }
+
+    public void setIdChat(int idChat) {
+        this.idChat = idChat;
+    }
+
+    public void setIdEmisor(int idEmisor) {
+        this.idEmisor = idEmisor;
+    }
+
+    public void setHoraLlegada(Timestamp horaLlegada) {
+        this.horaLlegada = horaLlegada;
+    }
+
+    public int getLeido() {
+        return leido;
+    }
 
     /**
      * Metodo que accede a la base de datos para actualizar los mensajes a leidos
      * @param leido : parametro que almacena si el mensaje ha sido leido o no
      */
     public void setLeido(int leido) {
-        //TODO UPDATE MENSAJES SET LEIDO = 0 WHERE MENSAJE=MENSAJE (OTRO METODO)
+        //TODO TEST
+        try {
+            Connection connection=MetodosDB.conexion();
+            PreparedStatement pstmt= connection.prepareStatement("UPDATE ad2223_amulero.Mensajes SET leido=1 WHERE idMensaje=?");
+            pstmt.setInt(1, this.idMensaje);
+            pstmt.execute();
+            connection.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         this.leido = leido;
     }
 }

@@ -43,22 +43,50 @@ public class Usuarios {
      * Metodo que accede a la base de datos para insertar un nuevo contacto
      * @param contaco
      */
-    public void setContactos(String contaco) {
-        this.contactos.add(contaco); //TEST
-        //TODO INSERT IN CONTACTOS (METODO NUEVO)
+    public void setContactos(String contacto) {
+        //TODO TEST
+        try {
+            Connection connection=MetodosDB.conexion();
+            PreparedStatement pstmt=connection.prepareStatement("INSERT INTO ad2223_amulero.Contactos VALUES(?,?)");
+            pstmt.setInt(1, this.id);
+            pstmt.setInt(2, Utilidades.obtenerIdUsuarioPorNombre(contacto));
+            pstmt.execute();
+            connection.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void setUsuariosBloqueados(String contacto, boolean bloquear) {
        if (bloquear){
-           this.usuariosBloqueados.add(contacto); //TEST
-           //TODO INSERT IN BLOQUEADOS (METODO NUEVO)
+           try {
+                Connection connection= MetodosDB.conexion();
+                PreparedStatement pstm=connection.prepareStatement("INSERT INTO Bloqueados VALUES (?,?)");
+                pstm.setInt(1, this.id);
+                pstm.setInt(2, Utilidades.obtenerIdUsuarioPorNombre(contacto));
+                pstm.execute();
+                connection.close();
+           }catch (Exception e){
+               e.printStackTrace();
+           }
        }
        else {
-           this.usuariosBloqueados.remove(contacto); //TEST
-           //TODO DELETE IN BLOQUEADOS (METODO NUEVO)
+           try {
+               Connection connection=MetodosDB.conexion();
+               PreparedStatement pstm=connection.prepareStatement("DELETE FROM Bloqueados WHERE idUsuario=? AND idBloqueado=?");
+               pstm.setInt(1, this.id);
+               pstm.setInt(2, Utilidades.obtenerIdUsuarioPorNombre(contacto));
+               pstm.execute();
+               connection.close();
+           }catch (Exception e){
+               e.printStackTrace();
+           }
        }
     }
 
+    public String getNombre() {
+        return nombre;
+    }
     //Metodos
 
     /**
@@ -69,10 +97,26 @@ public class Usuarios {
      * @return
      */
     public static Usuarios obtenerUsuario(String nombre, String contraseña){
-        //TODO SELECT USUARIO -> IF(FALSE){INSERT INTO USUARIOS (USUARIO NUEVO)} ELSE{RETUN USUARIO} (HACER AQUI)
-        //TEST
-        Usuarios usuario=new Usuarios(usuariosCreados, nombre, contraseña);
-        usuariosCreados++;
+        String consulta = "SELECT * FROM Usuarios WHERE nombre = '"+nombre+"'" +" AND contraseña = '"+contraseña+"'";
+        Connection con;
+        if (!MetodosDB.comprobarFila(consulta)){
+            try {
+                con = MetodosDB.conexion();
+                PreparedStatement pstmt= con.prepareStatement(" INSERT INTO ad2223_amulero.Usuarios (nombre, contraseña) VALUES (?,?)");
+                pstmt.setString(1, nombre);
+                pstmt.setString(2, contraseña);
+                pstmt.executeUpdate();
+                System.out.println("Usuario creado, iniciando sesión");
+            }catch (Exception ex){
+                System.out.println(ex);
+            }
+        }else{
+            System.out.println("Sesión iniciada");
+        }
+
+
+        List<String> DatosUsuario= MetodosDB.mostrarDatos(consulta, new String[]{"id", "nombre", "contraseña"}, new String[]{"int", "string", "string"});
+        Usuarios usuario = new Usuarios(Integer.parseInt(DatosUsuario.get(0)), DatosUsuario.get(1), DatosUsuario.get(2));
         return usuario;
     }
 

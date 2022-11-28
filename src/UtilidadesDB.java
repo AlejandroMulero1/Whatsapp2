@@ -5,7 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UtilidadesDB {
-    /*
+
+    /**
+     * Metodo que a través de la id de un usuario accedera a la base de datos y obtendra todos los chats en los que participa
+     * el usuario, devolviendo todos los chats encontrados en una lista
+     * @return listado con todos los chats en los que participa el usuario
+     */
     public static List<Chat> obtenerChat(int id){
         int m = 0;
         String nombreChat = null;
@@ -28,7 +33,7 @@ public class UtilidadesDB {
                 }
                 m++;
             }
-            ListaChats.add(new Chat(nombreChat, idParticipante1, idParticipante2));
+            ListaChats.add(new Chat(1 , nombreChat, idParticipante1, idParticipante2));
         }
         return ListaChats;
     }
@@ -44,7 +49,7 @@ public class UtilidadesDB {
             pstmt.setString(1, mensajeEnviado.getTexto());
             pstmt.setInt(2, mensajeEnviado.getIdChat());
             pstmt.setInt(3, mensajeEnviado.getIdEmisor());
-            pstmt.setDate(4, Date.valueOf(mensajeEnviado.getHoraLlegada().toLocalDateTime().toString()));
+            pstmt.setTimestamp(4, mensajeEnviado.getHoraLlegada());
             pstmt.setInt(5, mensajeEnviado.isLeido());
 
         }catch (Exception ex){
@@ -70,6 +75,6 @@ public class UtilidadesDB {
 
 
 
-*/
+
 
 }

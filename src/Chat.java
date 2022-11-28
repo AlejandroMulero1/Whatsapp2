@@ -23,6 +23,10 @@ public class Chat {
         this.idParticipante2 = idParticipante2;
     }
 
+    public Chat() {
+
+    }
+
     //Geters y Setters
     public int getIdChat() {
         return idChat;
@@ -32,6 +36,7 @@ public class Chat {
         this.idChat = idChat;
     }
 
+
     /**
      * Metodo que accederá a la base de datos y obtiene todos los mensajes pertenecientes al chat al que pertenece la id que
      * le pasamos como parametro al método
@@ -39,31 +44,62 @@ public class Chat {
      * @return una lista de mensajes la cual posee todos los mensajes de esa conversacion
      */
     public ArrayList<Mensajes> getMensajes(int idChat) {
-        //TODO SELECT * FROM MENSAJES WHERE ID CHAT= idChat (OTRO METODO)
-        //TEST
-        this.mensajes.add(new Mensajes("Hola javi",1,1,new Timestamp(System.currentTimeMillis()),0));
-        this.mensajes.add(new Mensajes("Hola Ale",1,2,new Timestamp(System.currentTimeMillis()),0));
-        this.mensajes.add(new Mensajes("Adios Javi",1,1,new Timestamp(System.currentTimeMillis()),0));
-        this.mensajes.add(new Mensajes("Adios Ale",1,2,new Timestamp(System.currentTimeMillis()),0));
-        return mensajes;
+        //TODO SELECT * FROM MENSAJES WHERE IdChat= :idChat
+        //TODO TEST
+        ArrayList<Mensajes> ListaMensajesCompleta = new ArrayList<>();
+        //Consulta
+        String consulta = "SELECT * FROM Mensajes WHERE idChat = " + idChat + " ORDER BY horaLLegada";
+        int m = 0;
+        //Extracción de la base de datos de todos los datos de los mensajes
+        List<String> ListaMensajes = MetodosDB.mostrarDatos(consulta, new String[]{"idMensaje", "texto", "idChat", "horaLlegada", "idEmisor", "leido"}, new String[]{"int", "string", "int", "timestamp", "int", "boolean"});
+        //Bucle que introduce los datos de la BBDD obtenidos en una lista de objetos Mensaje
+        for (int i = 0; i < ListaMensajes.size() / 6; i++) {
+            Mensajes mensaje = new Mensajes();
+            for (int j = 0; j < 6; j++) {
+                switch (j) {
+                    case 0: mensaje.setIdMensaje(Integer.parseInt(ListaMensajes.get(m)));
+                        break;
+                    case 1:mensaje.setTexto(ListaMensajes.get(m));
+                        break;
+                    case 2:mensaje.setIdChat(Integer.parseInt(ListaMensajes.get(m)));
+                        break;
+                    case 3:mensaje.setHoraLlegada(Timestamp.valueOf(ListaMensajes.get(m)));
+                        break;
+                    case 4:mensaje.setIdEmisor(Integer.parseInt(ListaMensajes.get(m)));
+                        break;
+                    case 5:mensaje.setLeido(Integer.parseInt(ListaMensajes.get(m)));
+                        break;
+                }
+                m++;
+            }
+            ListaMensajesCompleta.add(mensaje);
+        }
+        return ListaMensajesCompleta;
     }
+
 
     /**
      * Metodo que insertara en la base de datos un nuevo mensaje en el chat que le corresponda
      * @param mensaje : parametro que contiene los datos del mensaje a insertar en la base de datos
      */
     public void setMensajes(Mensajes mensaje) {
-        //TODO INSERT IN MENSAJES MENSAJE (OTRO METODO)
-        this.mensajes.add(mensaje);
+        UtilidadesDB.insertarMensaje(mensaje);
     }
 
     public String getNombreChat() {
         return nombreChat;
     }
 
+    public int getIdParticipante1() {
+        return idParticipante1;
+    }
+
+    public int getIdParticipante2() {
+        return idParticipante2;
+    }
 
 
-    //Metodos
+//Metodos
 
 
     //Hecho
@@ -91,24 +127,5 @@ public class Chat {
         Chat chatInsertado=new Chat(contadorChats, nombreChat, id1, id2);
         contadorChats++;
         return chatInsertado;
-    }
-
-    //MedioBien
-    public static void mostrarContenidoChat(int idChat){
-        String consulta = "SELECT texto FROM mensajes WHERE idChat "+idChat+"ORDER BY horaLLegada";
-        int m = 0;
-        List<String> ListaMensajes = MetodosDB.mostrarDatos(consulta, new String[]{"texto, horaLlegada, idEmisor"}, new String[]{"string","timestamp", "int"});
-        for (int i = 0; i < ListaMensajes.size()/3; i++) {
-            for (int j = 0; j < 3; j++) {
-                switch (j){
-                    case 0:
-                    case 1:
-                        System.out.print(ListaMensajes.get(m) +"  ");
-                        break;
-                    case 2:System.out.print(MetodosDB.mostrar1Dato("SELECT nombre FROM Usuarios WHERE id = "+ListaMensajes.get(m), "nombre", "string")+"\n");
-                        break;
-                }
-            }
-        }
     }
 }

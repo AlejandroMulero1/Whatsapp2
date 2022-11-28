@@ -6,8 +6,8 @@ table Usuarios
 table Chat
 	int idChat PK Identity
 	String nombreChat                  
-	int idParticipante1
-	int idParticipante2
+	int idPrimerUsuario
+	int idSegundoUsuario
 
 table mensajes
 	int idMensaje PK Identity

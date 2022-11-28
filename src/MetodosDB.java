@@ -10,7 +10,6 @@ public class MetodosDB {
         try {
             con = DriverManager.getConnection(url);
             if (con != null) {
-                System.out.println("Conexión establecida");
             }
         } catch (Exception ex) {
             System.out.println(ex);

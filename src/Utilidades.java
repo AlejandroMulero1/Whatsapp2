@@ -1,3 +1,6 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,14 +12,14 @@ public class Utilidades {
     /**
      * Metodo que inicia la sesion del usuario preguntandole sus datos y devuelve el usuario "logeado" a través del metodo
      * obtenerUsuario, el cual lo obtendra si ya existe en la base de datos, o lo creara
-     * @return objeto de la clase usuario que contendra los datos del usuario logueado
+     * @return objeto de la clase usuario que contendra los datos del usuario logeado
      */
     public static Usuarios iniciarSesion(){
         System.out.println("Introduzca el nombre de usuario");
         String usuario = s.next();
         System.out.println("Introduzca la contraseña");
         String contraseña = s.next();
-        Usuarios usuario1 = Usuarios.obtenerUsuario(usuario, contraseña); //TODO
+        Usuarios usuario1 = Usuarios.obtenerUsuario(usuario, contraseña);
         return usuario1;
     }
 
@@ -48,12 +51,12 @@ public class Utilidades {
 
     /**
      * Metodo que servira unicamente para mostrar por pantalla al usuario las diversas opciones que posee para interactuar con el programa
-     * la eleccion del usuario sera recogida en el parametro opcion para ser posteriormente devuelta al main para actuar en funcion
+     * la eleccion del usuario será recogida en el parametro opcion para ser posteriormente devuelta al main para actuar en funcion
      * a su valor
      * @return parametro que contiene la elección del usuario
      */
     public static int mostrarOpciones(){
-        int opcion=0;
+        int opcion;
         System.out.println("1. Leer el chat");
         System.out.println("2. Enviar un mensaje");
         System.out.println("3. Mostrar listado de contactos");
@@ -76,14 +79,21 @@ public class Utilidades {
      */
     public static void verChat(Usuarios usuario){
         String chat= mostrarOpcionesChats(usuario);
-        Chat chatSelected=getChat(chat);
+        Chat chatSelected=UtilidadesDB.obtenerChat(chat, UtilidadesDB.obtenerChat(usuario.getId()));
+        int participante1= chatSelected.getIdParticipante1();
+        String usuario1=obtenerNombreUsuarioPorId(participante1);
 
-        List<Mensajes> mensajesChat=chatSelected.getMensajes(chatSelected.getIdChat());
-        for (Mensajes mensaje:mensajesChat){
-            if (!usuario.getUsuariosBloqueados().contains(obtenerNombreUsuarioPorId(mensaje.getIdEmisor())))
-                System.out.println(obtenerNombreUsuarioPorId(mensaje.getIdEmisor())+ ": " + mensaje.getTexto() + " " + mensaje.getHoraLlegada() + "( " + mensaje.isLeido() + ")");
-            mensaje.setLeido(1);
+        int participante2 = chatSelected.getIdParticipante2();
+        String usuario2=obtenerNombreUsuarioPorId(participante2);
+        if (!usuario.getUsuariosBloqueados().contains(usuario1) || !usuario.getUsuariosBloqueados().contains(usuario2)){
+            List<Mensajes> mensajesChat=chatSelected.getMensajes(chatSelected.getIdChat());
+            for (Mensajes mensaje:mensajesChat){
+                System.out.println(obtenerNombreUsuarioPorId(mensaje.getIdEmisor())+ ": " + mensaje.getTexto() + "\n Fecha:" + mensaje.getHoraLlegada() + " (" + mensaje.isLeido() + ")");
+                System.out.println();
+                mensaje.setLeido(1);
+            }
         }
+
     }
 
     /**
@@ -109,9 +119,10 @@ public class Utilidades {
      */
     public static void escribirEnChat(Usuarios escritor){
         String chat= mostrarOpcionesChats(escritor);
-        Chat chatSelected=getChat(chat);
-        System.out.println("Escriba el mensaje:");
-        String texto=s.next();
+        Chat chatSelected=UtilidadesDB.obtenerChat(chat, UtilidadesDB.obtenerChat(escritor.getId()));
+        s.nextLine();
+        System.out.print("Escriba el mensaje:");
+        String texto=s.nextLine();
         Mensajes mensajeEnviado=new Mensajes(texto, chatSelected.getIdChat(),escritor.getId(), new Timestamp(System.currentTimeMillis()) ,0);
         chatSelected.setMensajes(mensajeEnviado);
     }
@@ -176,34 +187,7 @@ public class Utilidades {
     }
 
 
-    //METODOS PARA LA DAL
-
-    /**
-     * Metodo que accede a la base de datos para obtener el chat al que pertenezca el parametro nombre, el cual es el
-     * nombre de ese chat
-     * @param nombre : parametro que almacena el nombre del chat deseado
-     * @return un objeto de la clase chat que representa el chat deseado
-     */
-   public static Chat getChat(String nombre){
-        //TODO SELECT * FROM CHATS WHERE NOMBRE=nombre (AQUI)
-       //TODO RETUN CHAT
-        return new Chat(1, "chatTest", 1, 2); //TEST
-   }
-
-    /**
-     * Metodo que a través de la id de un usuario accedera a la base de datos y obtendra todos los chats en los que participa
-     * el usuario, devolviendo todos los chats encontrados en una lista
-     * @param idUsuario: parametro que almacena la id del usuario del cual queremos obtener sus chats
-     * @return listado con todos los chats en los que participa el usuario
-     */
-   public static List<Chat> obtenerChatsUsuario(int idUsuario){
-        //TODO SELECT * FROM CHAT WHERE (idParticipante1=idUsuario) OR (idParticipante2=idUsuario) (AQUI)
-       //TODO RETURN CHATS
-       //TEST
-       List<Chat> listaChats=new ArrayList<>();
-       listaChats.add(new Chat(1, "chatTest", 1, 2));
-        return listaChats;
-   }
+    //METODOS
 
     /**
      * Metodo que a traves de la id de un usuario, accedera a la base de datos para encontrar el nombre del usuario
@@ -212,9 +196,16 @@ public class Utilidades {
      */
     public static String obtenerNombreUsuarioPorId(int id){
        String nombreUsuario;
-       //TODO SELECT nombre FROM Usuarios WHERE idUsuario=id (AQUI)
-        if (id==1){nombreUsuario="Ale";}else {nombreUsuario="Javi";} //TEST
+       String consulta = "SELECT nombre FROM Usuarios WHERE id = "+id;
+       nombreUsuario = MetodosDB.mostrar1Dato(consulta, "nombre", "string");
        return nombreUsuario;
+    }
+
+    public static int obtenerIdUsuarioPorNombre(String nombre){
+        int idUsuario;
+        String consulta = "SELECT id FROM Usuarios WHERE nombre = '"+nombre+"'";
+        idUsuario = Integer.parseInt(MetodosDB.mostrar1Dato(consulta, "id", "int"));
+        return idUsuario;
     }
 
     /**
@@ -224,10 +215,11 @@ public class Utilidades {
     public static void crearChat(Usuarios usuario){
         verContactos(usuario);
         System.out.println("Introduzca al contacto que desea agregar a este chat: ");
-        String contacto=s.nextLine();
-        System.out.println();
+        String contacto=s.next();
+
         System.out.println("Introduzca el nombre del chat");
-        String nombre=s.nextLine();
-        //TODO INSERT CHATS CHAT (AQUI)
+        String nombre=s.next();
+        //TODO TEST
+        Chat.crearChat(nombre, usuario.getNombre(), contacto);
     }
 }
